@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+selected_command=$(cat $HOME/.zsh_history | fzf | sort | uniq)
+
+if [[ -n $selected_command ]]; then
+    eval $selected_command
+else
+    echo "No command selected."
+fi

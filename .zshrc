@@ -15,8 +15,20 @@ precmd() { vcs_info }
 zstyle ':vcs_info:git:*' formats ' (%b)'
 setopt PROMPT_SUBST
 
+get_git_user() {
+  if git rev-parse --is-inside-work-tree &>/dev/null; then
+    local user_name=$(git config user.name 2>/dev/null)
+    
+    if [[ -n "$user_name" ]]; then
+      echo " $user_name"
+    fi
+  fi
+
+}
+
+
 # Change the prompt
-PS1='%~${vcs_info_msg_0_} λ '
+PS1='%~${vcs_info_msg_0_}$(get_git_user) λ '
 
 # History
 setopt HIST_IGNORE_DUPS

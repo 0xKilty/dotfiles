@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+# Define the path to your git profiles file
+PROFILES_FILE="$HOME/.git_profiles"
+
+# Check if profiles file exists
+if [ ! -f "$PROFILES_FILE" ]; then
+  echo "Git profiles file not found!"
+  exit 1
+fi
+
+# Use fzf to select a profile from the list
+SELECTED_PROFILE=$(cat "$PROFILES_FILE" | fzf --prompt="Select Git Profile: ")
+
+# If no profile was selected, exit
+if [ -z "$SELECTED_PROFILE" ]; then
+  echo "No profile selected."
+  exit 1
+fi
+
+# Extract the username and email from the selected profile
+USER_NAME=$(echo "$SELECTED_PROFILE" | cut -d':' -f2)
+USER_EMAIL=$(echo "$SELECTED_PROFILE" | cut -d':' -f3)
+
+# Update Git configuration
+git config --global user.name "$USER_NAME"
+git config --global user.email "$USER_EMAIL"
+
+# Confirm the update
+echo "Git profile set:"
+git config --global user.name
+git config --global user.email
